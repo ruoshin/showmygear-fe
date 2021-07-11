@@ -1,5 +1,58 @@
 @import 'tailwind.css'
 @import '_colors'
+@import '_fontSizes'
+@import 'trailUserCard'
+@import 'trailMountainCard'
 
 body
   background: $white
+  font-size: $body
+
+.btn
+  background: $black
+  color: $white
+  font-size: 18px
+  padding: 0 18px
+  height: 40px
+  border-radius: 100px
+  &:hover
+    background: $primary-color
+  &:active
+    outline: none
+  &:disabled
+    background: $gray
+    color: $black
+  &.btn-primary
+    background: linear-gradient(238.04deg, #0038FF 16.08%, #5CC4FF 96.36%)
+    &:hover
+      background: $white
+      border: 2px solid $primary-color
+      color: $primary-color
+  &.btn-secondary
+      background: $primary-color-lighter
+      color: $primary-color
+      &:hover
+        background: $primary-color-light
+input
+  // background-image: linear-gradient(rgba($primary-color, 0.1), rgba($primary-color, 0.25)), linear-gradient(rgba($white, 1), rgba($white, 1))
+  background: $primary-color-lighter
+  border: 2px solid $primary-color-light
+  border-radius: 100px
+  padding: 5px 10px
+  color: $primary-color
+  width: 100%
+  &:focus
+    outline: none
+    box-shadow: 2px 2px 0px $primary-color
+    border-color: $primary-color
+  &:disabled
+    background: $gray-light
+    color: $gray
+    border-color: $gray-light
+    &::placeholder
+      color: $gray
+  &::placeholder
+    color: $primary-color-light
+
+
+  // @apply text-white text-lg border-2 border-blue-500 border-opacity-0 rounded-full px-4 py-1 bg-gradient-to-r from-blue-200 to-blue-600 hover:text-blue-600 hover:border-opacity-100
