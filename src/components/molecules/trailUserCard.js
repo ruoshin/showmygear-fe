@@ -5,9 +5,10 @@ const TrailUserCard = ({
   name,
   mountain = {},
   date,
-  burden
+  burden,
+  onClick
 }) => {
-  return <div className='trail-user-card'>
+  return <div className='trail-user-card' onClick={onClick}>
     <div className='user-name'>{name}</div>
     <div className='trail-data'>
       <div className='trail-info'>
@@ -17,7 +18,7 @@ const TrailUserCard = ({
         <div className='burden'>負重 {burden} kg</div>
       </div>
       <div className='c-wrapper'>
-        <Character />
+        <Character id={id}/>
       </div>
     </div>
   </div>

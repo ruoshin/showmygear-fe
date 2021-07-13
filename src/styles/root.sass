@@ -3,10 +3,21 @@
 @import '_fontSizes'
 @import 'trailUserCard'
 @import 'trailMountainCard'
+@import 'pages'
 
 body
   background: $white
   font-size: $body
+
+.layout
+  position: relative
+  max-width: 375px
+  margin: 0 auto
+  padding: 40px 15px
+  .logo
+    position: fixed
+    bottom: 20px
+    right: calc(50vw - 187.5px + 15px)
 
 .btn
   background: $black
