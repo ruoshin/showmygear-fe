@@ -15,7 +15,10 @@ import {
 
 const xmlns = 'http://www.w3.org/2000/svg';
 
-const Character = ({id}) => {
+const Character = ({
+  id,
+  width
+}) => {
   const getRandomColor = useCallback(()=>{
     const randomColor = Math.floor(Math.random()*16777215).toString(16);
     return `#${randomColor}`
@@ -108,7 +111,7 @@ const Character = ({id}) => {
       // width='300'
       // height='821'
       id={`character-${id}`}
-      style={{width: '100%'}}
+      style={{width: width ?? '100%' }}
       viewBox='0 0 353 821'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'>

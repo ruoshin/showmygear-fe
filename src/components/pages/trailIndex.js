@@ -1,5 +1,5 @@
 import Input from 'components/atoms/input';
-import TrailUserCard from 'components/molecules/trailUserCard';
+import TrailUserCard from 'components/molecules/TrailUserCard';
 
 const trailItems = [
   {
@@ -54,7 +54,7 @@ const trailItems = [
   },
 ]
 
-const TrailIndex = () => {
+const TrailIndex = ({onClick}) => {
   return (
     <div className='trail-index'>
       <h1>曬裝備</h1>
@@ -70,7 +70,7 @@ const TrailIndex = () => {
             mountain={item.mountain}
             date={item.date}
             burden={item.burden}
-            // onClick={()=>{}}
+            onClick={()=>onClick(1)}
           />
         ))
       }
