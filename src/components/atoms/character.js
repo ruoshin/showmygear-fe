@@ -15,7 +15,7 @@ import {
 
 const xmlns = 'http://www.w3.org/2000/svg';
 
-const Character = () => {
+const Character = ({id}) => {
   const getRandomColor = useCallback(()=>{
     const randomColor = Math.floor(Math.random()*16777215).toString(16);
     return `#${randomColor}`
@@ -30,7 +30,7 @@ const Character = () => {
   }, [])
 
   const createElement = useCallback((item = {})=>{
-    const svg = document.getElementsByTagName('svg')[0];
+    const svg = document.getElementById(`character-${id}`);
     const g = document.createElementNS(xmlns, 'g');
     const colorpaths = item.colors.map(c=>{
       g.appendChild(createPath(c.path, getRandomColor()))
@@ -41,46 +41,56 @@ const Character = () => {
     svg.appendChild(g)
   })
 
+  const wearBackpack = useCallback(()=>{
+    const backpack = document.getElementById(`backpack-outline-${id}`);
+      backpack.setAttribute("d", backpackOutlinePath);
+      backpack.style.fill = '#000';
+    const backpackColor = document.getElementById(`backpack-color-${id}`);
+      backpackColor.setAttribute("d", backpackColorPath);
+      backpackColor.style.fill = getRandomColor();
+    const strapItem = data.find(x=>x.type === 'backpack')
+    createElement(strapItem)
+  }, [])
+
+  const wearShoes = useCallback(()=>{
+    const item = data.find(x=>x.type === 'shoes')
+    createElement(item)
+  }, [])
+
+  const wearClothes = useCallback(()=>{
+    const clothes = document.getElementById(`clothes-color-${id}`);
+      clothes.setAttribute("d", clothesColorPath);
+      clothes.style.fill = getRandomColor();
+  }, [])
+
+  const wearPants = useCallback((color = '#FFD0A9') => {
+    const pants = document.getElementById(`pants-color-${id}`);
+      pants.setAttribute("d", pantsColorPath);
+      pants.style.fill = getRandomColor();
+  }, [])
+
+
   const setDefaultCharacter = useCallback(()=>{
-  // const svg = document.getElementsByTagName('svg')[0];
-  const bodyOutline = document.getElementById('body-outline');
-  bodyOutline.setAttribute("d", bodyOutlinePath);
-  bodyOutline.style.fill = '#000';
-  const bodyColor = document.getElementById('body-color');
-  bodyColor.setAttribute("d", bodyColorPath);
-  bodyColor.style.fill = '#FFD0A9';
-  const gloves = document.getElementById('gloves-color');
-  gloves.setAttribute("d", glovesColorPath);
-  gloves.style.fill = getRandomColor();
-}, [])
-
-  // const wearBackpack = useCallback(()=>{
-  //   const backpack = document.getElementById('backpack-outline');
-  //     backpack.setAttribute("d", backpackOutlinePath);
-  //     backpack.style.fill = '#000';
-  //   const backpackColor = document.getElementById('backpack-color');
-  //     backpackColor.setAttribute("d", backpackColorPath);
-  //     backpackColor.style.fill = getRandomColor();
-  //   const strapItem = data.find(x=>x.type === 'backpack')
-  //   createElement(strapItem)
-  // }, [])
-
-  // const wearShoes = useCallback(()=>{
-  //   const item = data.find(x=>x.type === 'shoes')
-  //   createElement(item)
-  // }, [])
-
-  // const wearClothes = useCallback(()=>{
-  //   const clothes = document.getElementById('clothes-color');
-  //     clothes.setAttribute("d", clothesColorPath);
-  //     clothes.style.fill = getRandomColor();
-  // }, [])
-
-  // const wearPants = useCallback((color = '#FFD0A9') => {
-  //   const pants = document.getElementById('pants-color');
-  //     pants.setAttribute("d", pantsColorPath);
-  //     pants.style.fill = getRandomColor();
-  // }, [])
+    // const svg = document.getElementsByTagName('svg')[0];
+    const bodyOutline = document.getElementById(`body-outline-${id}`);
+    bodyOutline.setAttribute("d", bodyOutlinePath);
+    bodyOutline.style.fill = '#000';
+    const bodyColor = document.getElementById(`body-color-${id}`);
+    bodyColor.setAttribute("d", bodyColorPath);
+    bodyColor.style.fill = '#FFD0A9';
+    const gloves = document.getElementById(`gloves-color-${id}`);
+    gloves.setAttribute("d", glovesColorPath);
+    gloves.style.fill = getRandomColor();
+    wearBackpack()
+    wearShoes()
+    wearClothes()
+    wearPants()
+  }, [
+    wearBackpack,
+    wearShoes,
+    wearClothes,
+    wearPants
+  ])
 
   const zoomIn = useCallback(()=>{
     const svg = document.getElementsByTagName('svg')[0];
@@ -97,14 +107,15 @@ const Character = () => {
     <svg
       // width='300'
       // height='821'
+      id={`character-${id}`}
       style={{width: '100%'}}
       viewBox='0 0 353 821'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'>
-      <path id='body-color' />
-      <path id='backpack-color' />
-      <path id='backpack-outline' />
-      <path id='clothes-color' />
+      <path id={`body-color-${id}`} />
+      <path id={`backpack-color-${id}`} />
+      <path id={`backpack-outline-${id}`} />
+      <path id={`clothes-color-${id}`} />
 
       {/* head */}
       <path d="M182 215.4C151.5 215.4 125.9 206.6 108 189.8C90.7001 173.7 81.6001 151.6 81.6001 125.7C81.6001 74.3 124.4 32.5 177.1 32.5C202.3 32.5 225.3 42.2 241.9 59.8C258.3 77.1 267.3 100.5 267.3 125.8C267.3 151.2 259.2 174 244.4 190C229 206.6 207.4 215.4 182 215.4Z" fill="#FFD0A9"/>
@@ -119,12 +130,12 @@ const Character = () => {
       <path d="M263.2 89.9C263.1 89.7 263 89.5 262.9 89.2C262.5 88.2 262.1 87.2 261.7 86.3C261.6 86.2 261.6 86.1 261.5 85.9C261.1 85 260.7 84.1 260.3 83.3C260.2 83.1 260.1 82.9 260 82.7C259.6 81.8 259.1 80.8 258.6 79.9C258.5 79.7 258.4 79.5 258.3 79.4C257.9 78.6 257.4 77.8 257 76.9C256.9 76.8 256.8 76.6 256.8 76.5C256.3 75.6 255.8 74.7 255.2 73.8C255.1 73.6 255 73.4 254.8 73.2C254.3 72.4 253.8 71.5 253.2 70.7C253.2 70.6 253.1 70.6 253.1 70.5C252.5 69.6 251.9 68.8 251.3 67.9C251.2 67.7 251 67.5 250.9 67.3C250.3 66.5 249.7 65.6 249 64.8C249 64.7 248.9 64.7 248.8 64.6C248.2 63.8 247.6 63.1 247 62.3C246.9 62.1 246.7 61.9 246.6 61.8C245.9 61 245.3 60.3 244.6 59.5C244.5 59.4 244.4 59.2 244.3 59.1C243.7 58.4 243.1 57.8 242.4 57.1C242.3 57 242.1 56.8 242 56.7C241.3 56 240.6 55.3 239.8 54.6C239.6 54.5 239.5 54.3 239.3 54.2C238.6 53.6 237.9 52.9 237.2 52.3C237.1 52.2 237 52.1 236.9 52C236.1 51.3 235.3 50.7 234.6 50C234.4 49.9 234.2 49.7 234 49.6C232.4 48.3 230.7 47.1 229 45.9C228.8 45.8 228.6 45.6 228.4 45.5C227.6 44.9 226.7 44.4 225.8 43.8C225.7 43.7 225.6 43.7 225.4 43.6C224.6 43.1 223.8 42.6 223 42.2C222.8 42.1 222.6 42 222.4 41.9C221.5 41.4 220.6 40.9 219.7 40.4C219.5 40.3 219.3 40.2 219.2 40.1C218.4 39.7 217.5 39.3 216.7 38.9C216.5 38.8 216.4 38.7 216.2 38.7C215.3 38.3 214.3 37.8 213.4 37.4C213.2 37.3 213 37.2 212.7 37.1C211.8 36.7 210.9 36.4 209.9 36C209.8 36 209.7 35.9 209.7 35.9C208.7 35.5 207.7 35.2 206.7 34.8C206.5 34.7 206.2 34.6 206 34.6C205 34.3 204 34 202.9 33.7C202.8 33.7 202.7 33.7 202.6 33.6C201.9 33.4 201.2 33.2 200.6 33C200.9 28.2 200.2 23.2 198.1 18.5C191.3 2.7 173 -4.5 157.3 2.3C150 5.4 131.7 13.9 128.6 30.8C127.3 37.9 137.1 32.7 142.4 36C141.8 36.2 141.1 36.5 140.5 36.7H140.4C104.4 50.8 78.8999 85.2 78.8999 125.4C78.8999 171.9 108.5 207.8 159.8 215.7V227.8C159.8 230.5 161.6 232.8 164.2 233.5L171.7 235.5C174.3 236.2 176.9 236.5 179.5 236.5C182.2 236.5 184.9 236.1 187.5 235.4L194.5 233.5C197.1 232.8 198.8 230.4 198.8 227.8V215.8C242.6 208.3 269 172.2 269 125.3C269.5 113.1 267.3 101 263.2 89.9ZM194.8 216.9V228.2C194.8 228.8 194.4 229.4 193.8 229.6L186.8 231.5C184.6 232.1 182.3 232.4 180 232.4C177.8 232.4 175.5 232.1 173.4 231.5L165.9 229.5C165.3 229.3 164.9 228.8 164.9 228.1V216.6C170.4 217.3 176.2 217.6 182.1 217.6C186.4 217.7 190.7 217.4 194.8 216.9ZM242.7 188.4C227.8 204.6 206.8 213.1 182 213.1C152.1 213.1 127 204.5 109.5 188.1C92.6999 172.5 83.7999 150.9 83.7999 125.7C83.7999 122.4 83.9999 119.1 84.2999 115.9C133.8 98.4 162.6 68.3 166.9 46.1C186.6 60.6 210.1 83 259.1 92C262.9 102.5 265 113.9 265 125.7C265 150.6 257.1 172.8 242.7 188.4Z" fill="black"/>
       <path d="M179.9 234.7C177.5 234.7 175 234.4 172.7 233.7L165.2 231.7C163.6 231.3 162.5 229.8 162.5 228.2V205H197V228.2C197 229.8 195.9 231.3 194.3 231.7L187.3 233.6C184.9 234.4 182.4 234.7 179.9 234.7Z" fill="#FFD0A9"/>
 
-      <path id='pants-color' />
-      <path id='gloves-color' />
-      <path id='body-outline' />
-      <path id='shoes-outline' />
-      <path id='strap-color' />
-      <path id='strap-outline' />
+      <path id={`pants-color-${id}`} />
+      <path id={`gloves-color-${id}`} />
+      <path id={`body-outline-${id}`} />
+      <path id={`shoes-outline-${id}`} />
+      <path id={`strap-color-${id}`} />
+      <path id={`strap-outline-${id}`} />
     </svg>
     )
 }
